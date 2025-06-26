@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2ad26d30-d514-4512-b95a-376de2797be2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/BI.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d75c5c55-08ce-41ed-ab67-4323c4b0bbf0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d75c5c55-08ce-41ed-ab67-4323c4b0bbf0/storage_v2/_src_/database/BI.RwgAAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d75c5c55-08ce-41ed-ab67-4323c4b0bbf0/storage_v2/_src_/database/BI.RwgAAA/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d75c5c55-08ce-41ed-ab67-4323c4b0bbf0/storage_v2/_src_/database/BI.RwgAAA/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d75c5c55-08ce-41ed-ab67-4323c4b0bbf0/storage_v2/_src_/database/BI.RwgAAA/schema/public.abK9xQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/demo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/docker-compose.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/connection_db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/features_selection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/label_encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/modeling.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/preproc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/queries.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/run_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/libs/tensor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/features_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/features_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/features_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/features_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/features_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/label_encoder_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/label_encoder_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/label_encoder_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/label_encoder_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/label_encoder_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/metadata_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/metadata_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/metadata_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/metadata_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/metadata_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.keras" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.keras" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.keras" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.keras" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/model_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.keras" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/scalers_LAL__v28102024__dataslicing_1-20d_ten6__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/scalers_ltv__v11052025__dataslicing_1-3d_ten3__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/scalers_ltv__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/scalers_ltv_online_frt__v11052025__dataslicing_1-3d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/models/scalers_ltv_online_frt__v11052025__dataslicing_4-10d_ten10__all1gen.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAGs/LTV/settings/constants.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/budibase" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/scheme_db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/run_all_services.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/runner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budibase/hosting/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/budibase/hosting/docker-compose.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/budibase" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2yfdxHZqDDyMBxvD4OMcH6NNl6o" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.LTV/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.hosting/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/shara/Downloads/BI&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\shara\Downloads\BI" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\shara\Downloads\BI" />
+      <recent name="C:\Users\shara\Downloads\BI\libs" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.status_updater">
+    <configuration name="status_updater" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="BI" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/status_updater.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LTV/docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="DAGs/LTV/docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="hosting/docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="budibase/hosting/docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.status_updater" />
+        <item itemvalue="Docker.hosting/docker-compose.yaml: Compose Deployment" />
+        <item itemvalue="Docker.LTV/docker-compose.yaml: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
+        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2ad26d30-d514-4512-b95a-376de2797be2" name="Changes" comment="" />
+      <created>1750229807953</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750229807953</updated>
+      <workItem from="1750229809258" duration="16647000" />
+      <workItem from="1750249680197" duration="3480000" />
+      <workItem from="1750313567638" duration="11897000" />
+      <workItem from="1750328084110" duration="7308000" />
+      <workItem from="1750418406319" duration="3908000" />
+      <workItem from="1750659545833" duration="15150000" />
+      <workItem from="1750676155476" duration="19837000" />
+      <workItem from="1750744734500" duration="1213000" />
+      <workItem from="1750746230354" duration="944000" />
+      <workItem from="1750751902559" duration="19788000" />
+      <workItem from="1750832517677" duration="28753000" />
+      <workItem from="1750919044179" duration="13861000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
