@@ -1,0 +1,3 @@
+[submodule "budibase"]
+	path = budibase
+	url = https://github.com/Budibase/budibase
