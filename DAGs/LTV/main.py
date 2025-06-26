@@ -134,6 +134,8 @@ def on_message(channel, method, properties, body):
             status = 3 if success else 4
             cursor.execute(f"UPDATE {tablename} SET status = %s WHERE id = %s", (status, task_id))
             conn.commit()
+            channel.basic_ack(delivery_tag=method.delivery_tag)
+
 
 
 

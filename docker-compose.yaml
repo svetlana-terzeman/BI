@@ -204,6 +204,10 @@ services:
     extends:
       file: DAGs/LTV/docker-compose.yaml
       service: ltv
+  lal:
+    extends:
+      file: DAGs/LAL/docker-compose.yaml
+      service: lal
 
 
 volumes:
