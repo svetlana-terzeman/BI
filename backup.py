@@ -15,10 +15,10 @@ import argparse, datetime as dt, shutil, subprocess, sys
 from pathlib import Path
 
 DEFAULT_BASE = Path.cwd()
-CLI_TAG      = "budibase-cli:local"
-DOCKERFILE   = Path(__file__).with_name("Dockerfile_budibase_cli")
+CLI_TAG = "budibase-cli:local"
+DOCKERFILE = Path(__file__).with_name("Dockerfile_budibase_cli")
 CONTAINER_NAME = "bbimporter"
-NETWORK      = "bi_network"
+NETWORK = "bi_network"
 
 def run(cmd: list[str], quiet=False, **kw) -> None:
     """
@@ -72,17 +72,17 @@ def main() -> None:
                     help="каталог с .env и backups/")
     args = ap.parse_args()
 
-    base      = args.base.expanduser().resolve()
-    env_file  = base / ".env"
-    backups   = base / "backups"
+    base = args.base.expanduser().resolve()
+    env_file = base / ".env"
+    backups = base / "backups"
     backups.mkdir(exist_ok=True)
 
     if not env_file.exists():
         sys.exit(f"[ERROR] .env not found: {env_file}")
 
-    ts       = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    archive  = backups / f"budibase_{ts}.tar.gz"
-    latest   = backups / "budibase_latest.tar.gz"
+    ts = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    archive = backups / f"budibase_{ts}.tar.gz"
+    latest = backups / "budibase_latest.tar.gz"
 
     env = read_env(env_file)
     couch_user = env.get("COUCH_DB_USER", "budibase")
