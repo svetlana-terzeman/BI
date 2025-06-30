@@ -1,13 +1,61 @@
-version: "3.8"
+# Сеть
+networks:
+  bi_network:
+    driver: bridge
+    name: bi_network
+    attachable: true
+    labels:
+      com.docker.compose.project: "bi_project"
+
+# Томы
+volumes:
+  couchdb3_data:
+  minio_data:
+  redis_data:
+  postgres_data:
+  rabbitmq_data:
+  import_state:
 
 services:
+# Сервис подгрузки бекапов
+  bb-importer:
+    build:
+      context: .
+      dockerfile: Dockerfile_budibase_cli
+    container_name: bb-importer
+    restart: unless-stopped
+    volumes:
+      - ./backups:/backups
+      - ./.env:/config/.env
+      - import_state:/state
+    entrypoint: [ "/bin/sh" ]
+    command:
+      - -c
+      - |
+        set -e
+        
+        # Импорт
+        if [ -f /backups/budibase_latest.tar.gz ] && [ ! -f /state/done ]; then
+          echo "Importing backup…"
+          budi backups --import /backups/budibase_latest.tar.gz --env /config/.env \
+          && touch /state/done
+          echo "Import finished"
+        else
+          echo "No backup to import OR already imported"
+        fi
+        
+        exec tail -f /dev/null
+    depends_on:
+      couchdb-service: { condition: service_started }
+      minio-service: { condition: service_started }
+    networks: [ bi_network ]
 
-  # --- Budibase ---
+  # Budibase
   app-service:
     image: budibase/apps
     container_name: bbapps
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
     environment:
       SELF_HOSTED: 1
       COUCH_DB_URL: http://${COUCH_DB_USER}:${COUCH_DB_PASSWORD}@couchdb-service:5984
@@ -28,13 +76,19 @@ services:
       BB_ADMIN_USER_PASSWORD: ${BB_ADMIN_USER_PASSWORD}
       PLUGINS_DIR: ${PLUGINS_DIR}
       OFFLINE_MODE: ${OFFLINE_MODE:-}
-    depends_on: [worker-service, redis-service]
+    depends_on:
+      bb-importer:
+        condition: service_started
+      worker-service:
+        condition: service_started
+      redis-service:
+        condition: service_started
 
   worker-service:
     image: budibase/worker
     container_name: bbworker
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
     environment:
       SELF_HOSTED: 1
       PORT: 4003
@@ -52,18 +106,27 @@ services:
       REDIS_URL: redis-service:6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       OFFLINE_MODE: ${OFFLINE_MODE:-}
-    depends_on: [redis-service, minio-service]
+    depends_on:
+      bb-importer:
+        condition: service_started
+      redis-service:
+        condition: service_started
+      minio-service:
+        condition: service_started
 
   minio-service:
     image: minio/minio
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio_data:/data
     environment:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      MINIO_BROWSER: "off"
+      MINIO_BROWSER: "on"
     command: server /data --console-address ":9001"
     healthcheck:
       test: timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
@@ -75,7 +138,7 @@ services:
     image: budibase/proxy
     container_name: bbproxy
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
     ports:
       - ${MAIN_PORT}:10000
     environment:
@@ -95,7 +158,7 @@ services:
   couchdb-service:
     image: budibase/couchdb:v3.3.3-sqs-v2.1.1
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
     environment:
       - COUCHDB_PASSWORD=${COUCH_DB_PASSWORD}
       - COUCHDB_USER=${COUCH_DB_USER}
@@ -106,7 +169,7 @@ services:
   redis-service:
     image: redis
     restart: unless-stopped
-    networks: [default, bi_network]
+    networks: [bi_network]
     command: redis-server --requirepass "${REDIS_PASSWORD}"
     volumes:
       - redis_data:/data
@@ -131,6 +194,7 @@ services:
       - RABBITMQ_PASS=mq_pass
     networks: [bi_network]
     restart: unless-stopped
+
   db:
     image: postgres:14
     ports:
@@ -185,21 +249,6 @@ services:
     networks: [bi_network]
     restart: unless-stopped
 
-  # --- DAG сервис ---
-#  ltv:
-#    build: DAGs/LTV
-#    depends_on:
-#      db:
-#        condition: service_healthy  # Ждём, пока PostgreSQL станет healthy
-#      rabbitmq:
-#        condition: service_started
-#    environment:
-#      - RESEARCH_PERIOD=90
-#      - CURRDATE=2025-06-15
-#      - SERVICE_NAME=LTV
-#    volumes:
-#      - ./result:/app/result
-#    networks: [bi_network]
   ltv:
     extends:
       file: DAGs/LTV/docker-compose.yaml
@@ -208,19 +257,3 @@ services:
     extends:
       file: DAGs/LAL/docker-compose.yaml
       service: lal
-
-
-volumes:
-  couchdb3_data:
-  minio_data:
-  redis_data:
-  postgres_data:
-  rabbitmq_data:
-
-networks:
-  bi_network:
-    driver: bridge
-    name: bi_network
-    attachable: true
-    labels:
-      com.docker.compose.project: "bi_project"
