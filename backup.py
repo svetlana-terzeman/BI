@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_BASE = Path.cwd()
 CLI_TAG = "budibase-cli:local"
 DOCKERFILE = Path(__file__).with_name("Dockerfile_budibase_cli")
-CONTAINER_NAME = "bbimporter"
+CONTAINER_NAME = "bb-importer"
 NETWORK = "bi_network"
 
 def run(cmd: list[str], quiet=False, **kw) -> None:
