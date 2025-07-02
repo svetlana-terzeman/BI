@@ -89,21 +89,21 @@ def process_task(task_data, filename):
 
         # Сохранение результатов
         logger.info("Сохранение результатов...")
-        os.makedirs('result', exist_ok=True)
+        os.makedirs('/app/result', exist_ok=True)
 
         if 'db' in save_result:
             connection_db.save_to_clickhouse(total_df)
             logger.info("Результаты сохранены в БД")
         if 'csv' in save_result:
-            csv_path = f'result/{filename}.csv'
+            csv_path = f'/app/result/{filename}.csv'
             total_df.to_csv(csv_path, index=False)
             logger.info(f"Результаты сохранены в CSV: {csv_path}")
         if 'excel' in save_result:
-            excel_path = f'result/{filename}.xlsx'
+            excel_path = f'/app/result/{filename}.xlsx'
             total_df.to_excel(excel_path, index=False)
             logger.info(f"Результаты сохранены в Excel: {excel_path}")
         if 'parquet' in save_result:
-            parquet_path = f'result/{filename}.parquet'
+            parquet_path = f'/app/result/{filename}.parquet'
             total_df.to_parquet(parquet_path, index=False)
             logger.info(f"Результаты сохранены в Parquet: {parquet_path}")
 
