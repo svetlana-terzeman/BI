@@ -179,6 +179,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      - ./result:/app/result
     depends_on:
       db:
         condition: service_healthy
@@ -253,7 +255,11 @@ services:
     extends:
       file: DAGs/LTV/docker-compose.yaml
       service: ltv
+    volumes:
+      - ./result:/app/result
   lal:
     extends:
       file: DAGs/LAL/docker-compose.yaml
       service: lal
+    volumes:
+      - ./result:/app/result

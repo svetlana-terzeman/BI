@@ -1,17 +1,28 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel, Field, validator
 from typing import Dict, Any, Type
 import logging
 import json
-from datetime import datetime
+import os
+import sys
+from pathlib import Path
+from datetime import datetime, timedelta
 from settings.constants import USERNAME, PASSWD, HOST, PORT, DB, scheme_forms
 from libs.scheme_db import BITaskRegister, Base  # Импортируем из scheme_db
 
 # Настройка логов
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
 logger = logging.getLogger(__name__)
+
 
 # Подключение к БД
 DATABASE_URL = f"postgresql://{USERNAME}:{PASSWD}@{HOST}:{PORT}/{DB}"
@@ -95,6 +106,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.mount("/static", StaticFiles(directory="result"), name="static")
+@app.get("/download/{filename}")
+def download_file(filename: str):
+    file_path = f"result/{filename}"
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type='application/octet-stream'
+    )
 
 def get_db():
     db = SessionLocal()
@@ -160,3 +180,67 @@ def register_task(task: TaskCreate, db: Session = Depends(get_db)):
         db.rollback()
         logger.error(f"Ошибка: {str(e)}")
         raise ValueError(f"Ошибка сервера")
+
+@app.get("/files")
+async def list_files(request: Request, days: int, db: Session = Depends(get_db)):
+    """Получить список файлов из БД за последние N дней"""
+    try:
+        # Проверка что days - положительное число
+        if days <= 0:
+            raise HTTPException(
+                status_code=400,
+                detail="Количество дней должно быть положительным числом"
+            )
+
+        # Рассчитываем дату, начиная с которой искать файлы
+        start = datetime.now()
+        cutoff_date = start - timedelta(days=days+1)
+        logger.info(f"Диапозон дат: {cutoff_date} - {start}")
+        # Запрос к БД для получения файлов
+        # db_filenames = db.query(BITaskRegister.filename) \
+        #     .filter(BITaskRegister.timestamp >= cutoff_date) \
+        #     .all()
+        db_filenames = [
+            filename[0] for filename in
+            db.query(BITaskRegister.filename)
+            .filter(BITaskRegister.timestamp >= cutoff_date)
+            .all()
+        ]
+        print(f"Файлы, полученные из БД: {db_filenames} ")
+        # Получаем все файлы из директории result
+        try:
+            all_files = os.listdir("result")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Папка 'result' не найдена")
+
+        # Фильтруем файлы по именам из БД (если days указан)
+        print(f"Все файлы: {all_files} ")
+        matched_files = [
+            f for f in all_files
+            if f.split('.')[0] in db_filenames
+        ]
+        print(f"Файлы с расширением: {matched_files} ")
+        # file_path=[]
+        # for filename in matched_files:
+        #     file_path.append(Path("result") / filename)
+        base_url = str(request.base_url)  # Получаем базовый URL сервера
+
+        file_urls = []
+        for filename in matched_files:
+            file_url = f"{base_url}static/{filename}"
+            file_urls.append(file_url)
+        return {
+            "days": days,
+            "files": matched_files,
+            "file_urls": file_urls,
+            "count": len(matched_files)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Ошибка при получении списка файлов: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Ошибка сервера при обработке запроса"
+        )
