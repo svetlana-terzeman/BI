@@ -105,39 +105,3 @@ def transform_total_df(
     total_df.columns = total_df.columns.str.upper()
     
     return total_df
-
-def add_lal_predictions(total_df: pd.DataFrame) -> pd.DataFrame:
-    """Добавляет и преобразует прогнозы LAL (Lifetime Activity Level) в общий DataFrame.
-
-    Функция:
-    1. Выбирает прогнозы LAL из общего DataFrame
-    2. Бинаризует значения PREDICT_VALUE по порогу TRESHOLD
-    3. Переименовывает признак PREDICT_FEATURE, добавляя '_PROD'
-    4. Объединяет обратно с общими данными
-    5. Удаляет столбец TRESHOLD
-
-    Args:
-        total_df (pd.DataFrame): Исходный DataFrame с прогнозами моделей
-
-    Returns:
-        pd.DataFrame: Модифицированный DataFrame с добавленными прогнозами LAL
-    """
-    # Выбираем только LAL прогнозы
-    df_lal = total_df[total_df['PREDICT_FEATURE'] == 'LAL'].copy()
-    
-    # Бинаризуем значения по порогу
-    df_lal['PREDICT_VALUE'] = df_lal.apply(
-        lambda x: 1 if x['PREDICT_VALUE'] >= x['TRESHOLD'] else 0, 
-        axis=1
-    )
-    
-    # Переименовываем признак
-    df_lal['PREDICT_FEATURE'] = df_lal['PREDICT_FEATURE'] + '_PROD'
-    
-    # Объединяем с исходными данными
-    result_df = pd.concat([total_df, df_lal], axis=0)
-    
-    # Удаляем ненужный столбец
-    result_df = result_df.drop(columns=['TRESHOLD'])
-    
-    return result_df

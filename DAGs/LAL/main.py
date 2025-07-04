@@ -84,6 +84,8 @@ def process_task(task_data, filename):
         total_df = functions.merge_model_predictions(passport_of_models)
         total_df = functions.transform_total_df(total_df, df_base)
         total_df = functions.add_lal_predictions(total_df)
+        # Удаляем ненужный столбец
+        total_df = total_df.drop(columns=['TRESHOLD'])
         total_df['REVISION'] = REVISION
         total_df['CUSTOMER_LIFETIMEDAY'] = total_df['CUSTOMER_LIFETIMEDAY'].astype(int)
 
