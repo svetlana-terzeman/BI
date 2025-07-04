@@ -137,7 +137,6 @@ def add_lal_predictions(total_df: pd.DataFrame) -> pd.DataFrame:
     # Объединяем с исходными данными
     result_df = pd.concat([total_df, df_lal], axis=0)
     
-    # Удаляем ненужный столбец
-    result_df = result_df.drop(columns=['TRESHOLD'])
+
     
     return result_df

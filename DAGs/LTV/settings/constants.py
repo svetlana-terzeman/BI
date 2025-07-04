@@ -116,22 +116,7 @@ passport_of_models = [
                                  'FAMILY_NAME_RUmost_frequent_category'
                                 ],
         'sequence_number':       (4,10000)
-    }, 
-    
-
-   # применяется для заказов 1-6 поиска look-a-like клиентов у кого сумма заказа свыше 20 тыс. 
-    # и до и с 22052025 остается та же для нее не считали еще пока что _LAL__v28102024__dataslicing_1-20d_ten6__all1gen
-    {
-        'revision':             '_LAL__v28102024__dataslicing_1-20d_ten6__all1gen',
-        'type_of_model':        'LAL',
-        'categorical_features':  [ # важно сохранить порядок фичей, так как он поадался в модель
-                                        'MART_NAME_RUmost_frequent_category',
-                                        'SEGMENT_NAME_RUmost_frequent_category', 
-                                        'CATEGORY_NAME_RUmost_frequent_category', 
-                                        'FAMILY_NAME_RUmost_frequent_category'
-                                 ],
-        'sequence_number':       (1,10000)
-    }, 
+    },
     
 ]
 

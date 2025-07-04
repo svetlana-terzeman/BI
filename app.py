@@ -11,7 +11,7 @@ import os
 import sys
 from pathlib import Path
 from datetime import datetime, timedelta
-from settings.constants import USERNAME, PASSWD, HOST, PORT, DB, scheme_forms
+from settings.constants import USERNAME, PASSWD, HOST, PORT, DB, scheme_forms, status_name
 from libs.scheme_db import BITaskRegister, Base  # Импортируем из scheme_db
 
 # Настройка логов
@@ -181,59 +181,83 @@ def register_task(task: TaskCreate, db: Session = Depends(get_db)):
         logger.error(f"Ошибка: {str(e)}")
         raise ValueError(f"Ошибка сервера")
 
+
 @app.get("/files")
 async def list_files(request: Request, days: int, db: Session = Depends(get_db)):
-    """Получить список файлов из БД за последние N дней"""
+    """Получить список записей из БД за последние N дней с файлами и URL"""
     try:
-        # Проверка что days - положительное число
         if days <= 0:
             raise HTTPException(
                 status_code=400,
                 detail="Количество дней должно быть положительным числом"
             )
 
-        # Рассчитываем дату, начиная с которой искать файлы
-        start = datetime.now()
-        cutoff_date = start - timedelta(days=days+1)
-        logger.info(f"Диапозон дат: {cutoff_date} - {start}")
-        # Запрос к БД для получения файлов
-        # db_filenames = db.query(BITaskRegister.filename) \
-        #     .filter(BITaskRegister.timestamp >= cutoff_date) \
-        #     .all()
-        db_filenames = [
-            filename[0] for filename in
-            db.query(BITaskRegister.filename)
-            .filter(BITaskRegister.timestamp >= cutoff_date)
+        # Рассчитываем дату среза
+        cutoff_date = (datetime.now() - timedelta(days=days-1)).date()
+        logger.info(f"Диапазон дат: {cutoff_date} - {datetime.now().date()}")
+
+        # Получаем все записи из БД
+        db_records = db.query(BITaskRegister) \
+            .filter(BITaskRegister.timestamp >= cutoff_date) \
             .all()
-        ]
-        print(f"Файлы, полученные из БД: {db_filenames} ")
-        # Получаем все файлы из директории result
+
+        # Получаем все файлы из директории
         try:
             all_files = os.listdir("result")
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Папка 'result' не найдена")
 
-        # Фильтруем файлы по именам из БД (если days указан)
-        print(f"Все файлы: {all_files} ")
-        matched_files = [
-            f for f in all_files
-            if f.split('.')[0] in db_filenames
-        ]
-        print(f"Файлы с расширением: {matched_files} ")
-        # file_path=[]
-        # for filename in matched_files:
-        #     file_path.append(Path("result") / filename)
-        base_url = str(request.base_url)  # Получаем базовый URL сервера
+        base_url = str(request.base_url)
+        result = []
 
-        file_urls = []
-        for filename in matched_files:
-            file_url = f"{base_url}static/{filename}"
-            file_urls.append(file_url)
+        for record in db_records:
+            # Базовые данные записи (без filename и timestamp)
+            record_data = {
+                "name": record.dag_name,
+                "status": status_name.get(record.status),
+                **record.task_metadata  # Разворачиваем словарь task_metadata в отдельные ключи
+                # "data": record.task_metadata
+            }
+
+
+            # Обрабатываем filename только если status == 3
+            if record.status == 3 and record.filename:
+                # Ищем все файлы, которые начинаются с этого filename
+                matched_files = [f for f in all_files if f.startswith(record.filename)]
+
+                if matched_files:
+                    for file in matched_files:
+                        # Создаем копию базовых данных записи
+                        file_record = record_data.copy()
+
+                        # Добавляем информацию о файле
+                        file_record.update({
+                            "file_format": file.split('.')[-1] if '.' in file else '',
+                            "file_name": {file}
+                        })
+                        result.append(file_record)
+                else:
+                    # Нет файлов - добавляем запись без URL
+                    no_file_record = record_data.copy()
+                    no_file_record.update({
+                        "file_format": '',
+                        "file_name": None
+                    })
+                    result.append(no_file_record)
+            else:
+                # status != 3 - добавляем запись с пустым filename
+                no_file_record = record_data.copy()
+                no_file_record.update({
+                    "file_format": '',
+                    "file_name": None
+                })
+                result.append(no_file_record)
+
         return {
             "days": days,
-            "files": matched_files,
-            "file_urls": file_urls,
-            "count": len(matched_files)
+            "records": result,
+            "count": len(result),
+            "file_count": sum(1 for r in result if r["file_name"])
         }
 
     except HTTPException:
