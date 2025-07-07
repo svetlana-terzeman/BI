@@ -8,7 +8,7 @@ import psycopg2
 import pandas   as pd
 from datetime           import datetime
 from libs               import queries, run_models, functions, connection_db
-from settings.constants import (passport_of_models, REVISION, reserach_period, save_result, \
+from settings.constants import (passport_of_models, REVISION, save_result, \
                                 HOST_BI, DB_BI, USERNAME_BI, PASSWD_BI, tablename,\
                                 RABBITMQ_USER, RABBITMQ_PASS, RABBITMQ_HOST, queue_name, \
                                 SCHEDULE_INTERVAL, MAX_PARALLEL_TASKS )

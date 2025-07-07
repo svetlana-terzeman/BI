@@ -1,10 +1,13 @@
 import datetime
 import pandas as pd
-def scoring_segment(reserach_period = 90, currdate = pd.to_datetime(datetime.datetime.now()).date().strftime('%Y-%m-%d')):
-    #table_name = 'BIG_DATA_LTV_ONLINE_OFFLINE_NEW'
+
+
+def scoring_segment(reserach_period=90, currdate=pd.to_datetime(datetime.datetime.now()).date().strftime('%Y-%m-%d'),
+                    seed=42):
+    # table_name = 'BIG_DATA_LTV_ONLINE_OFFLINE_NEW'
     table_name = 'BIG_DATA_LTV_ONLINE_OFFLINE_NEW2025'
-    
-    query_base =f'''
+
+    query_base = f'''
 with cte as (
 select 
 	CUSTOMER_ID 
@@ -53,6 +56,7 @@ select
 	*,
 	 if(IDENTIFICATION == 'ONLINE', 1, 2) as IDENTIFICATION_INDEX,
 	anyLast(FIRSTORDERDATE) over (partition by CUSTOMER_ID order by TRADE_DT) as anyLastNull
+
 from cte_two
 where CUSTOMER_ID not in (SELECT CUSTOMER_ID FROM cte_two where PRODUCT_CODE is null)
 order by TRADE_DT
@@ -86,7 +90,7 @@ select *,
 ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID
 	, IDENTIFICATION
     , CASSTICKID
-	order by mart_count DESC) as rn_mart
+	order by mart_count DESC, cityHash64(toString(MART_NAME_RU), {seed})) as rn_mart
 from cte_mart_count
 ),
 cte_segment_count as (
@@ -118,7 +122,7 @@ select *,
 ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID
 	, IDENTIFICATION
     , CASSTICKID
-	order by segment_count DESC) as rn_segment
+	order by segment_count DESC, cityHash64(toString(SEGMENT_NAME_RU), {seed})) as rn_segment
 from cte_segment_count
 ),
 cte_category_count as (
@@ -150,7 +154,7 @@ select *,
 ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID
 	, IDENTIFICATION
     , CASSTICKID
-	order by category_count DESC) as rn_category
+	order by category_count DESC, cityHash64(toString(CATEGORY_NAME_RU), {seed})) as rn_category
 from cte_category_count
 ),
 cte_family_count as (
@@ -182,7 +186,7 @@ select *,
 ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID
 	, IDENTIFICATION
     , CASSTICKID
-	order by family_count DESC) as rn_family
+	order by family_count DESC, cityHash64(toString(FAMILY_NAME_RU), {seed})) as rn_family
 from cte_family_count
 ),
 cte_six as (
@@ -295,5 +299,5 @@ ON family_count.CUSTOMER_ID = cm.CUSTOMER_ID AND family_count.CASSTICKID = cm.CA
 where rn_mart = 1  and rn_segment = 1 and rn_category = 1 and rn_family = 1
 
     '''
-    
+
     return query_base

@@ -187,13 +187,13 @@ services:
       rabbitmq:
         condition: service_started
     environment:
-      - DB_HOST=db
-      - DB_NAME=BI
-      - DB_USER=bitask_user
-      - DB_PASS=bitask_pass
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=admin
-      - RABBITMQ_PASS=mq_pass
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
     networks: [bi_network]
     restart: unless-stopped
 
@@ -202,9 +202,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=bitask_user
-      - POSTGRES_PASSWORD=bitask_pass
-      - POSTGRES_DB=BI
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -221,8 +221,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=mq_pass
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
@@ -241,13 +241,13 @@ services:
       rabbitmq:
         condition: service_started
     environment:
-      - DB_HOST=db
-      - DB_NAME=BI
-      - DB_USER=bitask_user
-      - DB_PASS=bitask_pass
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=admin
-      - RABBITMQ_PASS=mq_pass
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
     networks: [bi_network]
     restart: unless-stopped
 
@@ -257,9 +257,11 @@ services:
       service: ltv
     volumes:
       - ./result:/app/result
+      - ./DAGs/LTV/env/.env:/app/.env
   lal:
     extends:
       file: DAGs/LAL/docker-compose.yaml
       service: lal
     volumes:
       - ./result:/app/result
+      - ./DAGs/LAL/env/.env:/app/.env
