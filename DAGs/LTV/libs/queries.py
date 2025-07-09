@@ -17,12 +17,13 @@ select
 	, min(CREATED_AT_ORD) as min_data_purches
 	, max(CREATED_AT_ORD) as max_data_purches
 	, min(TRADE_DT)
-	, date_diff('day', FIRSTORDERDATE,toDate('{currdate}')) as b
+	, date_diff('day', FIRSTORDERDATE, toDate('{currdate}')) as b
 from 
 	{table_name}
 where
 	FIRSTORDERDATE <= TRADE_DT 
-	and date_diff('day', toDate(FIRSTORDERDATE), toDate('{currdate}')) <= {reserach_period} 
+	and toDate(FIRSTORDERDATE) <= toDate('{currdate}')
+	and date_diff('day', toDate(FIRSTORDERDATE) , toDate('{currdate}')) <= {reserach_period} 
 	and CUSTOMER_ID not in (
 		select 
 			CUSTOMER_ID 
@@ -235,7 +236,7 @@ select
 	CUSTOMER_ID
 	, CASSTICKID
 	, FIRSTORDERDATE
-	,  toDate('{currdate}') - FIRSTORDERDATE + 1 as LIFETIME_DAY
+	, dateDiff('day',  FIRSTORDERDATE, toDate('{currdate}') ) + 1 as LIFETIME_DAY
 	, TRADE_DT
 	, IDENTIFICATION
 	, IDENTIFICATION_INDEX
