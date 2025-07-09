@@ -1,5 +1,7 @@
 import time
 import os
+from tempfile import TMP_MAX
+
 import pika
 import json
 import logging
@@ -63,14 +65,19 @@ def process_task(task_data, filename):
         start_time = time.time()
         logger.info(f"Начало обработки задачи: {task_data}")
 
-        reserach_period = task_data.get('reserach_period', os.getenv("RESEARCH_PERIOD"))
-        currdate = task_data.get('currdate', os.getenv("CURRDATE")) #pd.to_datetime(datetime.now()).date().strftime('%Y-%m-%d')
+        reserach_period = task_data.get('RESEARCH_PERIOD')
+        currdate = task_data.get('CURRDATE')#, pd.to_datetime(datetime.now()).date().strftime('%Y-%m-%d')
 
         # Загрузка данных из БД
         logger.info("Загрузка данных из БД...")
         query_base = queries.scoring_segment(reserach_period, currdate)
         df_base    = connection_db.QueryExecuted(query_base)
         logger.info(f"Загружено {len(df_base)} записей")
+
+        excel_path = f'/app/result/tmp.xlsx'
+        # tmp = df_base[(df_base['CUSTOMER_ID']=='000009D5DED97A4174C7BC2DF6281A879509A91B')]
+        df_base.to_excel(excel_path, index=False)
+        logger.info(f"Результаты сохранены в Excel: {excel_path}")
 
         # Обработка моделей
         logger.info("Запуск обработки моделей...")

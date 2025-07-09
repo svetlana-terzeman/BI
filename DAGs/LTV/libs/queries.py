@@ -6,7 +6,8 @@ def scoring_segment(reserach_period=90, currdate=pd.to_datetime(datetime.datetim
                     seed=42):
     # table_name = 'BIG_DATA_LTV_ONLINE_OFFLINE_NEW'
     table_name = 'BIG_DATA_LTV_ONLINE_OFFLINE_NEW2025'
-
+    currdate = pd.to_datetime(currdate).date()
+    currdate = currdate - datetime.timedelta(days=1)
     query_base = f'''
 with cte as (
 select 
@@ -16,12 +17,12 @@ select
 	, min(CREATED_AT_ORD) as min_data_purches
 	, max(CREATED_AT_ORD) as max_data_purches
 	, min(TRADE_DT)
-	, date_diff('day', FIRSTORDERDATE,toDate(yesterday())) as b
+	, date_diff('day', FIRSTORDERDATE,toDate('{currdate}')) as b
 from 
 	{table_name}
 where
 	FIRSTORDERDATE <= TRADE_DT 
-	and date_diff('day', toDate(FIRSTORDERDATE), toDate(yesterday())) <= 90 
+	and date_diff('day', toDate(FIRSTORDERDATE), toDate('{currdate}')) <= {reserach_period} 
 	and CUSTOMER_ID not in (
 		select 
 			CUSTOMER_ID 
@@ -234,7 +235,7 @@ select
 	CUSTOMER_ID
 	, CASSTICKID
 	, FIRSTORDERDATE
-	, today() - FIRSTORDERDATE as LIFETIME_DAY
+	,  toDate('{currdate}') - FIRSTORDERDATE + 1 as LIFETIME_DAY
 	, TRADE_DT
 	, IDENTIFICATION
 	, IDENTIFICATION_INDEX
