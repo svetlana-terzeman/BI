@@ -63,8 +63,8 @@ def process_task(task_data, filename):
         start_time = time.time()
         logger.info(f"Начало обработки задачи: {task_data}")
 
-        reserach_period = task_data.get('reserach_period', os.getenv("RESEARCH_PERIOD"))
-        currdate = task_data.get('currdate', os.getenv("CURRDATE")) #pd.to_datetime(datetime.now()).date().strftime('%Y-%m-%d')
+        reserach_period = task_data.get('RESEARCH_PERIOD')
+        currdate = task_data.get('CURRDATE')
 
         # Загрузка данных из БД
         logger.info("Загрузка данных из БД...")
