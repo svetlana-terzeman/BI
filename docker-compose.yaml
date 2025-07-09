@@ -248,6 +248,8 @@ services:
       - RABBITMQ_HOST=${RABBITMQ_HOST}
       - RABBITMQ_USER=${RABBITMQ_USER}
       - RABBITMQ_PASS=${RABBITMQ_PASS}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     networks: [bi_network]
     restart: unless-stopped
 
@@ -257,11 +259,11 @@ services:
       service: ltv
     volumes:
       - ./result:/app/result
-      - ./DAGs/LTV/env/.env:/app/.env
+      - ./.env:/app/.env
   lal:
     extends:
       file: DAGs/LAL/docker-compose.yaml
       service: lal
     volumes:
       - ./result:/app/result
-      - ./DAGs/LAL/env/.env:/app/.env
+      - ./.env:/app/.env
