@@ -14,6 +14,9 @@ RABBITMQ_PASS = os.getenv('RABBITMQ_DEFAULT_PASS', 'mq_pass')
 retry_delay   = int(os.getenv('retry_delay', 5))  # время ожидания подключения к RabbitMQ
 max_retries   = int(os.getenv('max_retries', 15)) # максимальное кол-во попыток подключения к RabbitMQ
 
+external_IP   = os.getenv('external_IP', None)
+external_port = int(os.getenv('external_port', 8000))
+
 scheme_forms = {'LTV': {
                             'CURRDATE': {
                                             'type'     : 'datetime',
