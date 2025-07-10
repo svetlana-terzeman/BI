@@ -9,9 +9,10 @@ import logging
 import json
 import os
 import sys
+import requests
 from pathlib import Path
 from datetime import datetime, timedelta
-from settings.constants import USERNAME, PASSWD, HOST, PORT, DB, scheme_forms, status_name
+from settings.constants import USERNAME, PASSWD, HOST, PORT, DB, scheme_forms, status_name, external_IP, external_port
 from libs.scheme_db import BITaskRegister, Base  # Импортируем из scheme_db
 
 # Настройка логов
@@ -107,14 +108,14 @@ app = FastAPI(
 )
 
 app.mount("/static", StaticFiles(directory="result"), name="static")
-@app.get("/download/{filename}")
-def download_file(filename: str):
-    file_path = f"result/{filename}"
-    return FileResponse(
-        path=file_path,
-        filename=filename,
-        media_type='application/octet-stream'
-    )
+# @app.get("/download/{filename}")
+# def download_file(filename: str):
+#     file_path = f"result/{filename}"
+#     return FileResponse(
+#         path=file_path,
+#         filename=filename,
+#         media_type='application/octet-stream'
+#     )
 
 def get_db():
     db = SessionLocal()
@@ -144,7 +145,15 @@ def read_root():
 def health_check():
     return {"status": "OK"}
 
-
+@app.get("/ip")
+def get_ip():
+    if external_IP and external_port :
+        return {'ip' : external_IP, 'port' : external_port}
+    try:
+        ip = requests.get('https://ifconfig.me/ip').text.strip()
+        return {'ip' : ip, 'port' : external_port}
+    except Exception as e:
+        return {"ip": "localhost", "port" : external_port}
 
 @app.post("/send_task")
 def register_task(task: TaskCreate, db: Session = Depends(get_db)):
@@ -243,6 +252,7 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
                         "file_format": '',
                         "file_name": None
                     })
+
                     result.append(no_file_record)
             else:
                 # status != 3 - добавляем запись с пустым filename
