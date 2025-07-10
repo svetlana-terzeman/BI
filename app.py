@@ -208,6 +208,7 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
         # Получаем все записи из БД
         db_records = db.query(BITaskRegister) \
             .filter(BITaskRegister.timestamp >= cutoff_date) \
+            .order_by(BITaskRegister.timestamp.desc())\
             .all()
 
         # Получаем все файлы из директории
@@ -221,6 +222,7 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
         for record in db_records:
             # Базовые данные записи (без filename и timestamp)
             record_data = {
+                "created" : record.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
                 "name": record.dag_name,
                 "status": status_name.get(record.status),
                 **record.task_metadata  # Разворачиваем словарь task_metadata в отдельные ключи
@@ -260,7 +262,7 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
                     "file_name": None
                 })
                 result.append(no_file_record)
-
+        print(result)
         return {
             "days": days,
             "records": result,
