@@ -216,7 +216,6 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
         except FileNotFoundError:
             raise HTTPException(status_code=404, detail="Папка 'result' не найдена")
 
-        base_url = str(request.base_url)
         result = []
 
         for record in db_records:
@@ -233,23 +232,22 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
             if record.status == 3 and record.filename:
                 # Ищем все файлы, которые начинаются с этого filename
                 matched_files = [f for f in all_files if f.startswith(record.filename)]
+                if len(matched_files)>0:
+                    file = matched_files[0] #берем любой первый файл из списка
+                    # Создаем копию базовых данных записи
+                    file_record = record_data.copy()
 
-                if matched_files:
-                    for file in matched_files:
-                        # Создаем копию базовых данных записи
-                        file_record = record_data.copy()
-
-                        # Добавляем информацию о файле
-                        file_record.update({
-                            "file_format": file.split('.')[-1] if '.' in file else '',
-                            "file_name": {file}
-                        })
-                        result.append(file_record)
+                    # Добавляем информацию о файле
+                    file_record.update({
+                        "file_format": file.split('.')[-1] if '.' in file else '',
+                        "file_name": {file}
+                    })
+                    result.append(file_record)
                 else:
                     # Нет файлов - добавляем запись без URL
                     no_file_record = record_data.copy()
                     no_file_record.update({
-                        "file_format": '',
+                        "file_format": None,
                         "file_name": None
                     })
 
@@ -258,7 +256,7 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
                 # status != 3 - добавляем запись с пустым filename
                 no_file_record = record_data.copy()
                 no_file_record.update({
-                    "file_format": '',
+                    "file_format": None,
                     "file_name": None
                 })
                 result.append(no_file_record)
