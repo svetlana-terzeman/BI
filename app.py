@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel, Field, validator
 from typing import Dict, Any, Type
+import pytz
 import logging
 import json
 import os
@@ -126,7 +127,12 @@ def get_db():
 
 def generate_filename(dag_name: str) -> str:
     """Генерирует имя файла по шаблону dag_name__vYYYYMMDD-HHMMSS"""
-    now = datetime.now()
+    # Указываем московский часовой пояс
+    moscow_tz = pytz.timezone('Europe/Moscow')
+
+    # Получаем текущее время по Москве
+    now = datetime.now(moscow_tz)
+
     date_part = now.strftime("%Y%m%d")
     time_part = now.strftime("%H%M%S")
     return now, f"{dag_name}__v{date_part}-{time_part}"
@@ -200,9 +206,9 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
                 status_code=400,
                 detail="Количество дней должно быть положительным числом"
             )
-
+        moscow_tz = pytz.timezone('Europe/Moscow')
         # Рассчитываем дату среза
-        cutoff_date = (datetime.now() - timedelta(days=days-1)).date()
+        cutoff_date = (datetime.now(moscow_tz) - timedelta(days=days-1)).date()
         logger.info(f"Диапазон дат: {cutoff_date} - {datetime.now().date()}")
 
         # Получаем все записи из БД
@@ -222,7 +228,8 @@ async def list_files(request: Request, days: int, db: Session = Depends(get_db))
         for record in db_records:
             # Базовые данные записи (без filename и timestamp)
             record_data = {
-                "created" : record.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+
+                "created" : record.timestamp.astimezone(moscow_tz).strftime("%Y-%m-%d %H:%M:%S"),
                 "name": record.dag_name,
                 "status": status_name.get(record.status),
                 **record.task_metadata  # Разворачиваем словарь task_metadata в отдельные ключи

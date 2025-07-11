@@ -1,4 +1,4 @@
-from sqlalchemy                 import Column, Integer, String, JSON, DateTime, create_engine
+from sqlalchemy                 import Column, Integer, String, JSON, DateTime, create_engine,TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql             import func
 from settings.constants         import USERNAME, PASSWD, HOST, PORT, DB, tablename
@@ -17,6 +17,7 @@ class BITaskRegister(Base):
     status          = Column(Integer, default=0, nullable=False)
     filename        = Column(String(150), nullable=False)
     timestamp       = Column(DateTime(timezone=True), server_default=func.now())
+
 
 
 Base.metadata.create_all(bind=engine)
